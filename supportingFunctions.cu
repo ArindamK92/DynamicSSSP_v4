@@ -150,6 +150,7 @@ void read_and_transfer_input_SSSPtree_to_GPU(char* inputSSSPfile, vector<ColList
 	hop[startVertex] = 0;
 	cudaMemcpy(d_hop, hop.data(), size, cudaMemcpyHostToDevice);
 
+	//??we don't need this hop computing now
 	auto startTime = chrono::steady_clock::now();
 	bfsGPU(startVertex, nodes, SSSPTreeAdjListFull_device, SSSPTreeAdjListTracker_device, d_hop, visited);
 	auto endTime = std::chrono::steady_clock::now();

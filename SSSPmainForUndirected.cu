@@ -147,32 +147,38 @@ int main(int argc, char* argv[]) {
 		<< float(durationinsertEdge.count()) / 1000 << " milliseconds**" << endl;
 
 	//new code
-	int* Q_array = (int*)malloc((nodes) * sizeof(int));
-	vector<int> Del_Affected_array;
-	//printf("test 1");
-	*counter_del = cuCompactor::compact<RT_Vertex, int>(SSSP, affectedNodeList_del, nodes, predicate(), THREADS_PER_BLOCK);
-	for (int i = 0; i < *counter_del; i++) {
-		printf("%d::", affectedNodeList_del[i]);
-	}
-	//cudaDeviceSynchronize();
-	for (int i = 0; i < *counter_del; i++) {
-		int x = affectedNodeList_del[i];
-		Del_Affected_array.push_back(x);
-	}
-	//printf("test 2");
-	int j = 0;
-	while (j < Del_Affected_array.size())
-	{
-		int x = Del_Affected_array[j];
-		if (SSSPTreeAdjList.at(x).size() > 0) {
-			Del_Affected_array.insert(std::end(Del_Affected_array), std::begin(SSSPTreeAdjList.at(x)), std::end(SSSPTreeAdjList.at(x)));
-		}
-		
-		j++;
-	}
-	for (int i = 0; i < Del_Affected_array.size(); i++) {
-		printf("%d::", Del_Affected_array[i]);
-	}
+	//int* Q_array = (int*)malloc((nodes) * sizeof(int));
+	//vector<int> Del_Affected_array;
+
+	//auto startTime1 = high_resolution_clock::now();
+	//*counter_del = cuCompactor::compact<RT_Vertex, int>(SSSP, affectedNodeList_del, nodes, predicate(), THREADS_PER_BLOCK);
+	///*for (int i = 0; i < *counter_del; i++) {
+	//	printf("%d::", affectedNodeList_del[i]);
+	//}*/
+	////cudaDeviceSynchronize();
+	//for (int i = 0; i < *counter_del; i++) {
+	//	int x = affectedNodeList_del[i];
+	//	Del_Affected_array.push_back(x);
+	//}
+	////printf("test 2");
+	//int j = 0;
+	//while (j < Del_Affected_array.size())
+	//{
+	//	int x = Del_Affected_array[j];
+	//	if (SSSPTreeAdjList.at(x).size() > 0) {
+	//		Del_Affected_array.insert(std::end(Del_Affected_array), std::begin(SSSPTreeAdjList.at(x)), std::end(SSSPTreeAdjList.at(x)));
+	//	}
+	//	
+	//	j++;
+	//}
+	//auto stopTime1 = high_resolution_clock::now();//Time calculation ends
+	//auto durationin1 = duration_cast<microseconds>(stopTime1 - startTime1);// duration calculation
+	//cout << "**Time taken for creating Del_Affected_array: "
+	//	<< float(durationin1.count()) / 1000 << " milliseconds**" << endl;
+	//cout << "size of Del_Affected_array:" << j << endl;
+	//for (int i = 0; i < Del_Affected_array.size(); i++) {
+	//	printf("%d::", Del_Affected_array[i]);
+	//}
 	//new code 
 
 
@@ -264,7 +270,7 @@ int main(int argc, char* argv[]) {
 	cudaFree(change);
 	cudaFree(affectedNodeList);
 	cudaFree(counter);
-	cudaFree(AdjListTracker_device);
+	cudaFree(AdjListFull_device);
 	cudaFree(AdjListTracker_device);
 
 	cudaFree(SSSP);
