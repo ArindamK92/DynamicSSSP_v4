@@ -57,4 +57,8 @@ nvcc -o op_cE createChangedEdges.cpp
 example:  
 ```shell
 ./op_cE graph.txt 6 10 50
+<<<<<<< HEAD
 ```
+=======
+```
+>>>>>>> f40b468839ac9e1aab791410b123aeff4eaf2b12
