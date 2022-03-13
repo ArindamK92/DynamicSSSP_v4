@@ -37,22 +37,24 @@ void transfer_data_to_GPU(vector<ColWtList>& AdjList, int*& AdjListTracker, vect
 	//Transferring input graph and change edges data to GPU
 	cout << "Transferring graph data from CPU to GPU" << endl;
 	auto startTime_transfer = high_resolution_clock::now();
-
+	printf("edges: %d totalInsertion:%d sizeof(ColWt):%d \n",edges, totalInsertion, sizeof(ColWt));
 	cudaStatus = cudaMallocManaged(&AdjListFull_device, (2 * (edges + totalInsertion)) * sizeof(ColWt));
 	if (cudaStatus != cudaSuccess) {
 		fprintf(stderr, "cudaMalloc failed at InEdgesListFull structure");
 	}
+	printf("testA1");
 	std::copy(AdjListFull.begin(), AdjListFull.end(), AdjListFull_device);
-
+	//printf("testA2");
 
 	cudaStatus = cudaMalloc((void**)&AdjListTracker_device, (nodes + 1) * sizeof(int));
 	if (cudaStatus != cudaSuccess) {
 		fprintf(stderr, "cudaMalloc failed at InEdgesListTracker_device");
 	}
 	cudaMemcpy(AdjListTracker_device, AdjListTracker, (nodes + 1) * sizeof(int), cudaMemcpyHostToDevice);
-
+	//printf("testB");
 	//Asynchronous prefetching of data
 	cudaMemPrefetchAsync(AdjListFull_device, edges * sizeof(ColWt), deviceId);
+	//printf("testC");
 
 	if (zeroInsFlag != true) {
 		cudaStatus = cudaMallocManaged(&allChange_Ins_device, totalChangeEdges_Ins * sizeof(changeEdge));
@@ -60,10 +62,13 @@ void transfer_data_to_GPU(vector<ColWtList>& AdjList, int*& AdjListTracker, vect
 			fprintf(stderr, "cudaMalloc failed at allChange_Ins structure");
 		}
 		std::copy(allChange_Ins.begin(), allChange_Ins.end(), allChange_Ins_device);
+		//printf("testD");
 		//set cudaMemAdviseSetReadMostly by the GPU for change edge data
 		cudaMemAdvise(allChange_Ins_device, totalChangeEdges_Ins * sizeof(changeEdge), cudaMemAdviseSetReadMostly, deviceId);
+		//printf("testE");
 		//Asynchronous prefetching of data
 		cudaMemPrefetchAsync(allChange_Ins_device, totalChangeEdges_Ins * sizeof(changeEdge), deviceId);
+		//printf("testF");
 	}
 
 	if (zeroDelFlag != true) {
@@ -124,7 +129,7 @@ void read_and_transfer_input_SSSPtree_to_GPU(char* inputSSSPfile, vector<ColList
 
 	//Transferring SSSP tree data to GPU
 
-	cudaStatus = cudaMallocManaged(&SSSPTreeAdjListFull_device, (nodes - 1) * sizeof(int)); //SSSP tree has n-1 edges and we consider each edge 1 time
+	cudaStatus = cudaMallocManaged(&SSSPTreeAdjListFull_device, (nodes) * sizeof(int)); //1/7/2020:new change to nodes from nodes -1 as 0 0 0 is also a row in SSSP file//SSSP tree has n-1 edges and we consider each edge 1 time
 	if (cudaStatus != cudaSuccess) {
 		fprintf(stderr, "cudaMalloc failed at SSSPTreeAdjListFull_device structure");
 	}

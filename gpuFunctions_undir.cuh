@@ -173,6 +173,7 @@ __global__ void updateNeighbors(RT_Vertex* SSSP, int* counter, int* affectedNode
 					SSSP[tmpValueforIndex].Dist = SSSP[myn].Dist + mywt;
 					SSSP[tmpValueforIndex].Update = 2;
 					SSSP[tmpValueforIndex].Parent = myn;
+					
 					//Asynchrony code starts
 						//for (int i = AdjListTracker_device[tmpValueforIndex]; i < AdjListTracker_device[tmpValueforIndex + 1]; i++) {
 						//	int myn2 = AdjListFull_device[i].col;
