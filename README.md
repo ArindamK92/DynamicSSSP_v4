@@ -15,7 +15,7 @@ _____________
 
 example:  
 ```shell
-./op_main graph.txt 6 6 SSSP.txt cE.txt
+./op_main graph.txt 6 6 sssp.txt cE.txt
 ```
 
 
